@@ -15,6 +15,7 @@ interface ItemStore {
   mergeSort: () => void
   quickSort: () => void
   heapSort: () => void
+  countingSort: () => void
 }
 
 const sleep = async (time: number) =>
@@ -259,6 +260,36 @@ export const useItemStore = create<ItemStore>((set, get) => ({
 
     const copy: TItems = structuredClone(get().items)
     await _sort(copy)
+
+    await get().sleepUpdate(copy, 0)
+  },
+  countingSort: async () => {
+    const copy: TItems = structuredClone(get().items)
+
+    const max = Math.max(...copy)
+    const min = Math.min(...copy)
+
+    const range = max - min + 1
+    const count = Array.from({ length: range }, (_, i) => 0)
+    const output = Array.from({ length: copy.length }, (_, i) => 0)
+
+    for (let i = 0; i < copy.length; i++) {
+      count[copy[i] - min]++
+    }
+
+    for (let i = 1; i < count.length; i++) {
+      count[i] += count[i - 1]
+    }
+
+    for (let i = copy.length - 1; i >= 0; i--) {
+      output[count[copy[i] - min] - 1] = copy[i]
+      count[copy[i] - min]--
+    }
+
+    for (let i = 0; i < copy.length; i++) {
+      copy[i] = output[i]
+      await get().sleepUpdate(copy, 50)
+    }
 
     await get().sleepUpdate(copy, 0)
   }

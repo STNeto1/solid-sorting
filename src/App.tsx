@@ -11,6 +11,7 @@ const App: Component = () => {
   const mergeSort = useItemStore((state) => state.mergeSort)
   const quickSort = useItemStore((state) => state.quickSort)
   const heapSort = useItemStore((state) => state.heapSort)
+  const countingSort = useItemStore((state) => state.countingSort)
 
   return (
     <section>
@@ -22,6 +23,7 @@ const App: Component = () => {
       <button onclick={() => mergeSort()}>merge sort</button>
       <button onclick={() => quickSort()}>quick sort</button>
       <button onclick={() => heapSort()}>heap sort</button>
+      <button onclick={() => countingSort()}>counting sort</button>
 
       <ul>
         <For each={items}>{(item) => <li>{item}</li>}</For>
