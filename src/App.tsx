@@ -31,11 +31,36 @@ const defaultSort = () => {
   setItems(result)
 }
 
+const selectionSort = async () => {
+  const copy: Array<number> = structuredClone(items())
+  const n = copy.length
+
+  for (let i = 0; i < n - 1; i++) {
+    let min_idx = i
+
+    for (let j = i + 1; j < n; j++) {
+      if (copy[j] < copy[min_idx]) {
+        min_idx = j
+      }
+    }
+
+    let temp = copy[min_idx]
+    copy[min_idx] = copy[i]
+    copy[i] = temp
+  }
+
+  setItems(copy)
+}
+
 const App: Component = () => {
   return (
     <section>
       <button onclick={() => shuffle()}>shuffle</button>
       <button onclick={() => defaultSort()}>default sort</button>
+      <button onclick={async () => await selectionSort()}>
+        selection sort
+      </button>
+
       <ul>
         <For each={items()}>{(item) => <li>{item}</li>}</For>
       </ul>
