@@ -9,6 +9,7 @@ const App: Component = () => {
   const bubbleSort = useItemStore((state) => state.bubbleSort)
   const insertionSort = useItemStore((state) => state.insertionSort)
   const mergeSort = useItemStore((state) => state.mergeSort)
+  const quickSort = useItemStore((state) => state.quickSort)
 
   return (
     <section>
@@ -19,6 +20,7 @@ const App: Component = () => {
       <button onclick={() => insertionSort()}>insertion sort</button>
       <button onclick={() => insertionSort()}>insertion sort</button>
       <button onclick={() => mergeSort()}>merge sort</button>
+      <button onclick={() => quickSort()}>quick sort</button>
 
       <ul>
         <For each={items}>{(item) => <li>{item}</li>}</For>

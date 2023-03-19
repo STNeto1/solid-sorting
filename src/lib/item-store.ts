@@ -1,7 +1,9 @@
 import create from 'solid-zustand'
 
+type TItems = Array<number>
+
 interface ItemStore {
-  items: Array<number>
+  items: TItems
 
   shuffle: () => void
   defaultSort: () => void
@@ -9,6 +11,7 @@ interface ItemStore {
   bubbleSort: () => void
   insertionSort: () => void
   mergeSort: () => void
+  quickSort: () => void
 }
 
 const sleep = async (time: number) =>
@@ -17,7 +20,7 @@ const sleep = async (time: number) =>
 export const useItemStore = create<ItemStore>((set, get) => ({
   items: Array.from({ length: 10 }, (_, k) => k + 1),
   shuffle: () => {
-    const copy: Array<number> = structuredClone(get().items)
+    const copy: TItems = structuredClone(get().items)
     let counter = copy.length
 
     while (counter > 0) {
@@ -36,13 +39,13 @@ export const useItemStore = create<ItemStore>((set, get) => ({
     set((state) => ({ ...state, items: copy }))
   },
   defaultSort: () => {
-    const copy: Array<number> = structuredClone(get().items)
+    const copy: TItems = structuredClone(get().items)
     copy.sort((a, b) => a - b)
 
     set((state) => ({ ...state, items: copy }))
   },
   selectionSort: async () => {
-    const copy: Array<number> = structuredClone(get().items)
+    const copy: TItems = structuredClone(get().items)
     const n = copy.length
 
     for (let i = 0; i < n - 1; i++) {
@@ -64,7 +67,7 @@ export const useItemStore = create<ItemStore>((set, get) => ({
     }
   },
   bubbleSort: async () => {
-    const copy: Array<number> = structuredClone(get().items)
+    const copy: TItems = structuredClone(get().items)
     const n = copy.length
 
     for (let i = 0; i < n - 1; i++) {
@@ -81,7 +84,7 @@ export const useItemStore = create<ItemStore>((set, get) => ({
     }
   },
   insertionSort: async () => {
-    const copy: Array<number> = structuredClone(get().items)
+    const copy: TItems = structuredClone(get().items)
     const n = copy.length
 
     for (let i = 0; i < n; i++) {
@@ -98,14 +101,9 @@ export const useItemStore = create<ItemStore>((set, get) => ({
     }
   },
   mergeSort: async () => {
-    const copy: Array<number> = structuredClone(get().items)
+    const copy: TItems = structuredClone(get().items)
 
-    const merge = async (
-      arr: Array<number>,
-      l: number,
-      m: number,
-      r: number
-    ) => {
+    const merge = async (arr: TItems, l: number, m: number, r: number) => {
       const n1 = m - l + 1
       const n2 = r - m
 
@@ -160,7 +158,7 @@ export const useItemStore = create<ItemStore>((set, get) => ({
       }
     }
 
-    const sort = async (arr: Array<number>, l: number, r: number) => {
+    const sort = async (arr: TItems, l: number, r: number) => {
       if (l >= r) {
         return
       }
@@ -174,5 +172,48 @@ export const useItemStore = create<ItemStore>((set, get) => ({
     }
 
     sort(copy, 0, copy.length - 1)
+  },
+  quickSort: async () => {
+    const copy: TItems = structuredClone(get().items)
+
+    const partition = async (arr: TItems, low: number, high: number) => {
+      const pivot = arr[high]
+      let i = low - 1
+
+      for (let j = low; j <= high - 1; j++) {
+        if (arr[j] < pivot) {
+          i++
+
+          let temp = arr[j]
+          arr[j] = arr[i]
+          arr[i] = temp
+
+          await sleep(50)
+          set((state) => ({ ...state, items: arr }))
+        }
+      }
+
+      let temp = arr[high]
+      arr[high] = arr[i + 1]
+      arr[i + 1] = temp
+
+      await sleep(50)
+      set((state) => ({ ...state, items: arr }))
+
+      return i + 1
+    }
+
+    const _quickSort = async (arr: TItems, low: number, high: number) => {
+      if (low < high) {
+        const pi = await partition(arr, low, high)
+
+        await _quickSort(arr, low, pi - 1)
+        await _quickSort(arr, pi + 1, high)
+
+        set((state) => ({ ...state, items: arr }))
+      }
+    }
+
+    await _quickSort(copy, 0, copy.length - 1)
   }
 }))
