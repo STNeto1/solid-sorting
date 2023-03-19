@@ -14,6 +14,7 @@ interface ItemStore {
   insertionSort: () => void
   mergeSort: () => void
   quickSort: () => void
+  heapSort: () => void
 }
 
 const sleep = async (time: number) =>
@@ -214,5 +215,51 @@ export const useItemStore = create<ItemStore>((set, get) => ({
     }
 
     await _quickSort(copy, 0, copy.length - 1)
+  },
+  heapSort: async () => {
+    const heapify = async (arr: TItems, n: number, i: number) => {
+      let largest = i
+      let l = 2 * i + 1
+      let r = 2 * i + 2
+
+      if (l < n && arr[l] > arr[largest]) {
+        largest = l
+      }
+
+      if (r < n && arr[r] > arr[largest]) {
+        largest = r
+      }
+
+      if (largest != i) {
+        let temp = arr[i]
+        arr[i] = arr[largest]
+        arr[largest] = temp
+
+        await get().sleepUpdate(copy, 50)
+
+        await heapify(arr, n, largest)
+      }
+    }
+
+    const _sort = async (arr: TItems) => {
+      for (let i = arr.length / 2 - 1; i >= 0; i--) {
+        await heapify(arr, arr.length, i)
+      }
+
+      for (let i = arr.length - 1; i > 0; i--) {
+        let temp = arr[0]
+        arr[0] = arr[i]
+        arr[i] = temp
+
+        await get().sleepUpdate(copy, 50)
+
+        await heapify(arr, i, 0)
+      }
+    }
+
+    const copy: TItems = structuredClone(get().items)
+    await _sort(copy)
+
+    await get().sleepUpdate(copy, 0)
   }
 }))
