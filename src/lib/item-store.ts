@@ -8,13 +8,14 @@ interface ItemStore {
   selectionSort: () => void
   bubbleSort: () => void
   insertionSort: () => void
+  mergeSort: () => void
 }
 
 const sleep = async (time: number) =>
   await new Promise((f) => setTimeout(f, time))
 
 export const useItemStore = create<ItemStore>((set, get) => ({
-  items: Array.from({ length: 20 }, (_, k) => k + 1),
+  items: Array.from({ length: 10 }, (_, k) => k + 1),
   shuffle: () => {
     const copy: Array<number> = structuredClone(get().items)
     let counter = copy.length
@@ -95,5 +96,83 @@ export const useItemStore = create<ItemStore>((set, get) => ({
       await sleep(50)
       set((state) => ({ ...state, items: copy }))
     }
+  },
+  mergeSort: async () => {
+    const copy: Array<number> = structuredClone(get().items)
+
+    const merge = async (
+      arr: Array<number>,
+      l: number,
+      m: number,
+      r: number
+    ) => {
+      const n1 = m - l + 1
+      const n2 = r - m
+
+      const l_a = new Array(n1)
+      const r_a = new Array(n2)
+
+      for (let _i = 0; _i < n1; _i++) {
+        l_a[_i] = arr[l + _i]
+      }
+      for (let _j = 0; _j < n1; _j++) {
+        r_a[_j] = arr[m + 1 + _j]
+      }
+
+      let i = 0
+      let j = 0
+      let k = l
+
+      while (i < n1 && j < n2) {
+        if (l_a[i] <= r_a[j]) {
+          arr[k] = l_a[i]
+          i++
+
+          await sleep(50)
+          set((state) => ({ ...state, items: arr }))
+        } else {
+          arr[k] = r_a[j]
+          j++
+
+          await sleep(50)
+          set((state) => ({ ...state, items: arr }))
+        }
+
+        k++
+      }
+
+      while (i < n1) {
+        arr[k] = l_a[i]
+        i++
+        k++
+
+        await sleep(50)
+        set((state) => ({ ...state, items: arr }))
+      }
+
+      while (j < n2) {
+        arr[k] = r_a[j]
+        j++
+        k++
+
+        await sleep(50)
+        set((state) => ({ ...state, items: arr }))
+      }
+    }
+
+    const sort = async (arr: Array<number>, l: number, r: number) => {
+      if (l >= r) {
+        return
+      }
+
+      const m = l + ~~((r - l) / 2)
+
+      await sort(arr, l, m)
+      await sort(arr, m + 1, r)
+
+      await merge(arr, l, m, r)
+    }
+
+    sort(copy, 0, copy.length - 1)
   }
 }))
