@@ -2,12 +2,16 @@ lockfileVersion: 5.4
 
 specifiers:
   solid-js: ^1.6.10
+  solid-zustand: ^1.5.0
   typescript: ^4.9.5
   vite: ^4.1.1
   vite-plugin-solid: ^2.5.0
+  zustand: ^4.3.6
 
 dependencies:
   solid-js: 1.6.10
+  solid-zustand: 1.5.0_6dzh35akmscodus5ic6zqmi52a
+  zustand: 4.3.6
 
 devDependencies:
   typescript: 4.9.5
@@ -839,6 +843,16 @@ packages:
       solid-js: 1.6.10
     dev: true
 
+  /solid-zustand/1.5.0_6dzh35akmscodus5ic6zqmi52a:
+    resolution: {integrity: sha512-SkbYulMm1ASWAad8y7/o4ZAdL4JhK7TnaVk5y/N8PmnowVyGJDClILUfB9/pVBlzEb/oQkfvOH86VgHV4saA4w==}
+    peerDependencies:
+      solid-js: '>=1.4.0'
+      zustand: ^4.1.0
+    dependencies:
+      solid-js: 1.6.10
+      zustand: 4.3.6
+    dev: false
+
   /source-map-js/1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
@@ -877,6 +891,12 @@ packages:
       escalade: 3.1.1
       picocolors: 1.0.0
     dev: true
+
+  /use-sync-external-store/1.2.0:
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dev: false
 
   /vite-plugin-solid/2.5.0_solid-js@1.6.10+vite@4.1.1:
     resolution: {integrity: sha512-VneGd3RyFJvwaiffsqgymeMaofn0IzQLPwDzafTV2f1agoWeeJlk5VrI5WqT9BTtLe69vNNbCJWqLhHr9fOdDw==}
@@ -943,3 +963,18 @@ packages:
   /yallist/3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
     dev: true
+
+  /zustand/4.3.6:
+    resolution: {integrity: sha512-6J5zDxjxLE+yukC2XZWf/IyWVKnXT9b9HUv09VJ/bwGCpKNcaTqp7Ws28Xr8jnbvnZcdRaidztAPsXFBIqufiw==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      use-sync-external-store: 1.2.0
+    dev: false
