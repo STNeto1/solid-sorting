@@ -6,10 +6,14 @@ interface ItemStore {
   shuffle: () => void
   defaultSort: () => void
   selectionSort: () => void
+  bubbleSort: () => void
 }
 
+const sleep = async (time: number) =>
+  await new Promise((f) => setTimeout(f, time))
+
 export const useItemStore = create<ItemStore>((set, get) => ({
-  items: Array.from({ length: 10 }, (_, k) => k + 1),
+  items: Array.from({ length: 20 }, (_, k) => k + 1),
   shuffle: () => {
     const copy: Array<number> = structuredClone(get().items)
     let counter = copy.length
@@ -52,9 +56,26 @@ export const useItemStore = create<ItemStore>((set, get) => ({
       copy[min_idx] = copy[i]
       copy[i] = temp
 
-      await new Promise((f) => setTimeout(f, 50))
+      await sleep(50)
 
       set((state) => ({ ...state, items: copy }))
+    }
+  },
+  bubbleSort: async () => {
+    const copy: Array<number> = structuredClone(get().items)
+    const n = copy.length
+
+    for (let i = 0; i < n - 1; i++) {
+      for (let j = 0; j < n - i - 1; j++) {
+        if (copy[j] > copy[j + 1]) {
+          let temp = copy[j]
+          copy[j] = copy[j + 1]
+          copy[j + 1] = temp
+          await sleep(50)
+
+          set((state) => ({ ...state, items: copy }))
+        }
+      }
     }
   }
 }))
