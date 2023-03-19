@@ -13,6 +13,7 @@ const App: Component = () => {
   const heapSort = useItemStore((state) => state.heapSort)
   const countingSort = useItemStore((state) => state.countingSort)
   const bucketSort = useItemStore((state) => state.bucketSort)
+  const radixSort = useItemStore((state) => state.radixSort)
 
   return (
     <section>
@@ -26,6 +27,7 @@ const App: Component = () => {
       <button onclick={() => heapSort()}>heap sort</button>
       <button onclick={() => countingSort()}>counting sort</button>
       <button onclick={() => bucketSort()}>bucket sort</button>
+      <button onclick={() => radixSort()}>radix sort</button>
 
       <ul>
         <For each={items}>{(item) => <li>{item}</li>}</For>

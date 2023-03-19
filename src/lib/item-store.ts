@@ -17,13 +17,14 @@ interface ItemStore {
   heapSort: () => void
   countingSort: () => void
   bucketSort: () => void
+  radixSort: () => void
 }
 
 const sleep = async (time: number) =>
   await new Promise((f) => setTimeout(f, time))
 
 export const useItemStore = create<ItemStore>((set, get) => ({
-  items: Array.from({ length: 10 }, (_, k) => k + 1),
+  items: Array.from({ length: 20 }, (_, k) => k + 1),
 
   sleepUpdate: async (_items, _sleep) => {
     await sleep(_sleep)
@@ -333,5 +334,42 @@ export const useItemStore = create<ItemStore>((set, get) => ({
         }
       }
     }
+  },
+  radixSort: async () => {
+    const copy: TItems = structuredClone(get().items)
+
+    const _count = async (arr: TItems, n: number, exp: number) => {
+      const output = new Array(n)
+      const count = Array.from({ length: 10 }, () => 0)
+
+      for (let i = 0; i < n; i++) {
+        count[Math.floor(arr[i] / exp) % 10]++
+      }
+
+      for (let i = 1; i < 10; i++) {
+        count[i] += count[i - 1]
+      }
+
+      for (let i = n - 1; i >= 0; i--) {
+        output[count[Math.floor(arr[i] / exp) % 10] - 1] = arr[i]
+        count[Math.floor(arr[i] / exp) % 10]--
+      }
+
+      for (let i = 0; i < n; i++) {
+        arr[i] = output[i]
+      }
+
+      await get().sleepUpdate(output, 1000)
+    }
+
+    const _radixSort = async (arr: TItems, n: number) => {
+      const max = Math.max(...arr)
+
+      for (let exp = 1; Math.floor(max / exp) > 0; exp *= 10) {
+        await _count(arr, n, exp)
+      }
+    }
+
+    await _radixSort(copy, copy.length)
   }
 }))
