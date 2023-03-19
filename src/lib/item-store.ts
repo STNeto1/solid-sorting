@@ -5,6 +5,8 @@ type TItems = Array<number>
 interface ItemStore {
   items: TItems
 
+  sleepUpdate: (items: TItems, sleepDuration: number) => Promise<void>
+
   shuffle: () => void
   defaultSort: () => void
   selectionSort: () => void
@@ -19,7 +21,13 @@ const sleep = async (time: number) =>
 
 export const useItemStore = create<ItemStore>((set, get) => ({
   items: Array.from({ length: 10 }, (_, k) => k + 1),
-  shuffle: () => {
+
+  sleepUpdate: async (_items, _sleep) => {
+    await sleep(_sleep)
+    set((state) => ({ ...state, items: _items }))
+  },
+
+  shuffle: async () => {
     const copy: TItems = structuredClone(get().items)
     let counter = copy.length
 
@@ -36,13 +44,13 @@ export const useItemStore = create<ItemStore>((set, get) => ({
       copy[index] = temp
     }
 
-    set((state) => ({ ...state, items: copy }))
+    await get().sleepUpdate(copy, 0)
   },
-  defaultSort: () => {
+  defaultSort: async () => {
     const copy: TItems = structuredClone(get().items)
     copy.sort((a, b) => a - b)
 
-    set((state) => ({ ...state, items: copy }))
+    await get().sleepUpdate(copy, 0)
   },
   selectionSort: async () => {
     const copy: TItems = structuredClone(get().items)
@@ -61,9 +69,7 @@ export const useItemStore = create<ItemStore>((set, get) => ({
       copy[min_idx] = copy[i]
       copy[i] = temp
 
-      await sleep(50)
-
-      set((state) => ({ ...state, items: copy }))
+      await get().sleepUpdate(copy, 50)
     }
   },
   bubbleSort: async () => {
@@ -76,9 +82,8 @@ export const useItemStore = create<ItemStore>((set, get) => ({
           let temp = copy[j]
           copy[j] = copy[j + 1]
           copy[j + 1] = temp
-          await sleep(50)
 
-          set((state) => ({ ...state, items: copy }))
+          await get().sleepUpdate(copy, 50)
         }
       }
     }
@@ -96,8 +101,8 @@ export const useItemStore = create<ItemStore>((set, get) => ({
         j -= 1
       }
       copy[j + 1] = key
-      await sleep(50)
-      set((state) => ({ ...state, items: copy }))
+
+      await get().sleepUpdate(copy, 50)
     }
   },
   mergeSort: async () => {
@@ -126,14 +131,12 @@ export const useItemStore = create<ItemStore>((set, get) => ({
           arr[k] = l_a[i]
           i++
 
-          await sleep(50)
-          set((state) => ({ ...state, items: arr }))
+          await get().sleepUpdate(arr, 50)
         } else {
           arr[k] = r_a[j]
           j++
 
-          await sleep(50)
-          set((state) => ({ ...state, items: arr }))
+          await get().sleepUpdate(arr, 50)
         }
 
         k++
@@ -144,8 +147,7 @@ export const useItemStore = create<ItemStore>((set, get) => ({
         i++
         k++
 
-        await sleep(50)
-        set((state) => ({ ...state, items: arr }))
+        await get().sleepUpdate(arr, 50)
       }
 
       while (j < n2) {
@@ -153,8 +155,7 @@ export const useItemStore = create<ItemStore>((set, get) => ({
         j++
         k++
 
-        await sleep(50)
-        set((state) => ({ ...state, items: arr }))
+        await get().sleepUpdate(arr, 50)
       }
     }
 
@@ -188,8 +189,7 @@ export const useItemStore = create<ItemStore>((set, get) => ({
           arr[j] = arr[i]
           arr[i] = temp
 
-          await sleep(50)
-          set((state) => ({ ...state, items: arr }))
+          await get().sleepUpdate(arr, 50)
         }
       }
 
@@ -197,8 +197,7 @@ export const useItemStore = create<ItemStore>((set, get) => ({
       arr[high] = arr[i + 1]
       arr[i + 1] = temp
 
-      await sleep(50)
-      set((state) => ({ ...state, items: arr }))
+      await get().sleepUpdate(arr, 50)
 
       return i + 1
     }
