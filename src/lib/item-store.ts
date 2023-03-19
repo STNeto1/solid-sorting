@@ -7,6 +7,7 @@ interface ItemStore {
   defaultSort: () => void
   selectionSort: () => void
   bubbleSort: () => void
+  insertionSort: () => void
 }
 
 const sleep = async (time: number) =>
@@ -76,6 +77,23 @@ export const useItemStore = create<ItemStore>((set, get) => ({
           set((state) => ({ ...state, items: copy }))
         }
       }
+    }
+  },
+  insertionSort: async () => {
+    const copy: Array<number> = structuredClone(get().items)
+    const n = copy.length
+
+    for (let i = 0; i < n; i++) {
+      let key = copy[i]
+      let j = i - 1
+
+      while (j >= 0 && copy[j] > key) {
+        copy[j + 1] = copy[j]
+        j -= 1
+      }
+      copy[j + 1] = key
+      await sleep(50)
+      set((state) => ({ ...state, items: copy }))
     }
   }
 }))
