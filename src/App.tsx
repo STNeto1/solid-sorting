@@ -59,7 +59,7 @@ const App: Component = () => {
           <Button disabled={sorting()} onclick={() => sortingWrapper(cSort)}>
             counting sort
           </Button>
-          <Button disabled={sorting()} onclick={() => sortingWrapper(bSort)}>
+          <Button disabled={sorting()} onclick={() => sortingWrapper(bkSort)}>
             bucket sort
           </Button>
           <Button disabled={sorting()} onclick={() => sortingWrapper(rSort)}>
