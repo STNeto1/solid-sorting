@@ -9,15 +9,15 @@ interface ItemStore {
 
   shuffle: () => void
   defaultSort: () => void
-  selectionSort: () => void
-  bubbleSort: () => void
-  insertionSort: () => void
-  mergeSort: () => void
-  quickSort: () => void
-  heapSort: () => void
-  countingSort: () => void
-  bucketSort: () => void
-  radixSort: () => void
+  selectionSort: () => Promise<void>
+  bubbleSort: () => Promise<void>
+  insertionSort: () => Promise<void>
+  mergeSort: () => Promise<void>
+  quickSort: () => Promise<void>
+  heapSort: () => Promise<void>
+  countingSort: () => Promise<void>
+  bucketSort: () => Promise<void>
+  radixSort: () => Promise<void>
 }
 
 const sleep = async (time: number) =>
@@ -176,7 +176,7 @@ export const useItemStore = create<ItemStore>((set, get) => ({
       await merge(arr, l, m, r)
     }
 
-    sort(copy, 0, copy.length - 1)
+    await sort(copy, 0, copy.length - 1)
   },
   quickSort: async () => {
     const copy: TItems = structuredClone(get().items)
